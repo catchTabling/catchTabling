@@ -1,0 +1,27 @@
+services:
+  mysql:
+    image: 'mysql:latest'
+    environment:
+      - 'MYSQL_DATABASE=mydatabase'
+      - 'MYSQL_PASSWORD=secret'
+      - 'MYSQL_ROOT_PASSWORD=verysecret'
+      - 'MYSQL_USER=myuser'
+    ports:
+      - '3306'
+    networks:
+      - springboot-mysql-net
+
+  spring-boot-app:
+    build:
+      context: ./
+      dockerfile: Dockerfile
+    ports:
+      - 8080:8080
+    depends_on:
+      - mysql
+    networks:
+      - springboot-mysql-net
+
+networks:
+  springboot-mysql-net:
+    driver: bridge
